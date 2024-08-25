@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<!-- ini bagian utama untuk memanggil button dan lampu  -->
 
-## Getting Started
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<!-- "use client";
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+import { Button } from "@/components/ui/button";
+import { database } from "@/lib/firebase";
+import { ref, onValue, set } from "firebase/database";
+import { useEffect, useState } from "react";
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+const Home = () => {
+  const [ledStatus, setLedStatus] = useState(false);
+  const [distance, setDistance] = useState(0);
+  const [ledStatus2, setledStatus2] = useState(false);
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+  useEffect(() => {
+    const ledStatus = ref(database, "ledStatus");
+    onValue(ledStatus, (snapshot) => {
+      const status = snapshot.val();
 
-## Learn More
+      setLedStatus(status);
+    });
 
-To learn more about Next.js, take a look at the following resources:
+    const distanceStatus = ref(database, "distance");
+    onValue(distanceStatus, (snapshot) => {
+      const status = snapshot.val();
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+      setDistance(status);
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+      // Jika jarak kurang dari 30 cm, matikan LED
+    });
 
-## Deploy on Vercel
+    const ledStatus2 = ref(database, "ledStatus2");
+    onValue(ledStatus2, (snapshot) => {
+      const status = snapshot.val();
+      setledStatus2(status);
+    });
+  }, []);
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  const toggleLed = () => {
+    set(ref(database, "ledStatus"), !ledStatus);
+  };
+  return (
+    <div className="flex flex-col mx-auto justify-center items-center min-h-screen">
+      <div className="flex gap-20 items-center justify-center  ">
+        <div>
+          <h1 className="text-3xl font-bold mb-4">
+            LED is {ledStatus ? "ON" : "OFF"}
+          </h1>
+          <Button
+            onClick={toggleLed}
+            variant={ledStatus ? "destructive" : "default"}
+          >
+            Turn LED {ledStatus ? "OFF" : "ON"}
+          </Button>
+        </div>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+        <div>
+          <h1 className="text-3xl font-bold mb-4">{distance}</h1>
+          <h1 className="text-3xl font-bold mb-4">
+            LED2 is {ledStatus2 ? "ON" : "OFF"}
+          </h1>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Home; -->
