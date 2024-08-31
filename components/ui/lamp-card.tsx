@@ -3,54 +3,35 @@
 import { LampButton } from "./lamp-button";
 import { Card, CardTitle, CardDescription } from "./card-component";
 import Image from "next/image";
+import { Button } from "./button";
 
 interface LampCardProps {
   item: { title: string; description: string };
   idx: number;
-  isActive: boolean;
   lamps: Record<string, boolean>;
-  setLamps: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
-  setActiveIndexes: React.Dispatch<React.SetStateAction<boolean[]>>;
+  activeIndexes: boolean[];
+  toggleLamp: (idx: number) => void;
   loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const LampCard = ({
   item,
   idx,
-  isActive,
   lamps,
-  setLamps,
-  setActiveIndexes,
+  activeIndexes,
+  toggleLamp,
   loading,
-  setLoading,
 }: LampCardProps) => {
   return (
-    <div className="relative group block p-2 h-full w-full">
+    <div className=" h-full w-full p-2 pb-0">
+      <span className="text-xs">{item.title}</span>
       <Card>
-        <CardTitle>{item.title}</CardTitle>
-        <CardDescription className="text-white mt-2">
-          {item.description}
-        </CardDescription>
-        <div className="flex flex-col items-center justify-center gap-4">
-          <div className="h-full w-full flex items-center justify-center">
-            <Image
-              src={isActive ? "/bulb_on.jpg" : "/bulb_off.jpg"}
-              alt="bulb"
-              width={200}
-              height={200}
-            />
-          </div>
-          <LampButton
-            idx={idx}
-            isActive={isActive}
-            lamps={lamps}
-            setLamps={setLamps}
-            setActiveIndexes={setActiveIndexes}
-            loading={loading}
-            setLoading={setLoading}
-          />
-        </div>
+        <LampButton
+          idx={idx}
+          active={activeIndexes[idx]}
+          loading={loading}
+          onClick={() => toggleLamp(idx)}
+        />
       </Card>
     </div>
   );

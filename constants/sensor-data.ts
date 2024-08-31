@@ -10,23 +10,9 @@ export const sensorData = [
   },
   {
     id: 2,
-    title: "asap",
-    endpoint: "fireStatus",
+    title: "gas",
+    endpoint: "gasStatus",
     lottieUrl:
       "https://lottie.host/1e5d0836-9df6-41d4-beb9-9dbae9b11230/m5WcSZhG3j.json",
-  },
-  {
-    id: 3,
-    title: "water",
-    endpoint: "fireStatus",
-    lottieUrl:
-      "https://lottie.host/5a371caf-4d68-433f-95fa-d556d678e79f/XXZQ7UC0rf.json",
-  },
-  {
-    id: 4,
-    title: "ph tanah",
-    endpoint: "fireStatus",
-    lottieUrl:
-      "https://lottie.host/5a371caf-4d68-433f-95fa-d556d678e79f/XXZQ7UC0rf.json",
   },
 ];

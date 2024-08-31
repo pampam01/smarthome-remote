@@ -1,4 +1,6 @@
+import HumidityVisualizer from "@/components/Humidity";
 import Sensor from "@/components/Sensor";
+import ThermometerComponent from "@/components/Thermometer";
 import { sensorData } from "@/constants/sensor-data";
 import React from "react";
 
@@ -14,6 +16,8 @@ const MonitoringPage = () => {
             lottieUrl={sensor.lottieUrl}
           />
         ))}
+        <HumidityVisualizer />
+        <ThermometerComponent />
       </div>
     </div>
   );

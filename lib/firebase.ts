@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getDatabase, ref, get, set, onValue } from "firebase/database";
 
 // Your web app's Firebase configuration
@@ -15,8 +15,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+export const db = getDatabase(app);
 
 // Function to get data from Firebase
 export const getFirebaseData = async (path: string) => {
@@ -35,7 +35,7 @@ export const listenToFirebaseData = (
   path: string,
   callback: (data: any) => void
 ) => {
-  const db = getDatabase();
+  // const db = getDatabase();
   const dataRef = ref(db, path);
 
   const unsubscribe = onValue(dataRef, (snapshot) => {
@@ -45,4 +45,16 @@ export const listenToFirebaseData = (
 
   // Return the unsubscribe function to stop listening when the component unmounts
   return unsubscribe;
+};
+
+export const getRealtimeFirebaseData = (
+  path: string,
+  callback: (data: any) => void
+) => {
+  // const db = getDatabase();
+  const dataRef = ref(db, path);
+  onValue(dataRef, (snapshot) => {
+    const data = snapshot.val();
+    callback(data);
+  });
 };
