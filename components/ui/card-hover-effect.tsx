@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { LampCard } from "./lamp-card";
-import { getFirebaseData, setFirebaseData } from "@/lib/firebase";
+import { listenToFirebaseData, setFirebaseData } from "@/lib/firebase";
 import { cn } from "@/lib/utils";
 import AllLampControls from "./AllLampsControls";
 import ServoControl from "../ServoControl";
-import PirLamp from "../PirLamp";
 
 interface LampItem {
   title: string;
@@ -23,21 +22,23 @@ export const HoverEffect = ({ items, className }: HoverEffectProps) => {
   const [lamps, setLamps] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
 
-  const fetchLampData = async () => {
-    setLoading(true);
-
-    const lampData = await getFirebaseData("/lampStatus");
-    setLamps(lampData);
-
-    const newActiveIndexes = items.map((_, idx) => {
-      return lampData[`lamp${idx + 1}`];
-    });
-    setActiveIndexes(newActiveIndexes);
-  };
-
   useEffect(() => {
     setLoading(true);
-    fetchLampData().finally(() => setLoading(false));
+    const fetchLampDataRealtime = listenToFirebaseData(
+      "/lampStatus",
+      (data) => {
+        setLamps(data);
+
+        const newActiveIndexes = items.map((_, idx) => {
+          return data[`lamp${idx + 1}`] ?? false;
+        });
+
+        setActiveIndexes(newActiveIndexes);
+        setLoading(false);
+      }
+    );
+
+    return () => fetchLampDataRealtime();
   }, [items]);
 
   const toggleLamp = async (idx: number) => {
@@ -69,8 +70,10 @@ export const HoverEffect = ({ items, className }: HoverEffectProps) => {
     try {
       const updateLamps: Record<string, boolean> = {};
       for (let i = 0; i < items.length; i++) {
-        updateLamps[`lamp${i + 1}`] = state;
-        await setFirebaseData(`/lampStatus/lamp${i + 1}`, state);
+        if (lamps[`lamp${i + 1}`] !== state) {
+          updateLamps[`lamp${i + 1}`] = state;
+          await setFirebaseData(`/lampStatus/lamp${i + 1}`, state);
+        }
       }
       setLamps(updateLamps);
       setActiveIndexes(Array(items.length).fill(state));
@@ -95,7 +98,6 @@ export const HoverEffect = ({ items, className }: HoverEffectProps) => {
             key={item.title}
             item={item}
             idx={idx}
-            lamps={lamps}
             activeIndexes={activeIndexes}
             toggleLamp={toggleLamp}
             loading={loading}

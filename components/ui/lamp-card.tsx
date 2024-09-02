@@ -8,7 +8,7 @@ import { Button } from "./button";
 interface LampCardProps {
   item: { title: string; description: string };
   idx: number;
-  lamps: Record<string, boolean>;
+
   activeIndexes: boolean[];
   toggleLamp: (idx: number) => void;
   loading: boolean;
@@ -17,7 +17,6 @@ interface LampCardProps {
 export const LampCard = ({
   item,
   idx,
-  lamps,
   activeIndexes,
   toggleLamp,
   loading,
